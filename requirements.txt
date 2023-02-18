@@ -1,0 +1,4 @@
+detoxify==0.5.1
+Flask==2.2.3
+Flask_Cors==3.0.10
+instagramy==4.5
