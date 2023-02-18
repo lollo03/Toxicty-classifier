@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.css" rel="stylesheet" crossorigin="anonymous" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row mt-3 mb-3">
+        <h1>Toxicity classifier</h1>
+      </div>
+      <div class="row mb-3">
+        <div class="accordion" id="accordionPanelsStayOpenExample">
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+              <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                How to use the classifier
+              </button>
+            </h2>
+            <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+              <div class="accordion-body">
+                <strong>You can detect the toxicity of individual phrases or the toxicity of the first few comments on the latest post of any public Instagram account.</strong> <br />
+                <strong>The toxicity of each comment (or the phrase that you enter) will be displayed in the table below.</strong> <br />
+                <strong>Each phrase or comment will be classified based on different factors listed in the columns.</strong> <br />
+                The classifier works in multiple languages. Please keep in mind that <strong>the analysis of the comments may take a few seconds.</strong>
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#panelsStayOpen-collapseTwo"
+                aria-expanded="false"
+                aria-controls="panelsStayOpen-collapseTwo"
+              >
+                How the classifier works
+              </button>
+            </h2>
+            <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+              <div class="accordion-body">
+                The classifier is comprised of two parts: the server, which is a Python script that acts as an HTTP server and handles the heavy lifting, and this webpage, which manages the input and
+                output of data while communicating with the Python script. The server utilizes the following libraries: <strong>Flask for the web server</strong>,
+                <strong>Detoxify for classification</strong>, and <strong>Instagramy for scraping data from Instagram</strong>. The webpage uses <strong>Bootstrap for styling</strong> and plain
+                <strong>HTML and JavaScript</strong>.
+              </div>
+            </div>
+          </div>
+          <div class="accordion-item">
+            <h2 class="accordion-header" id="panelsStayOpen-headingThree">
+              <button
+                class="accordion-button collapsed"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#panelsStayOpen-collapseThree"
+                aria-expanded="false"
+                aria-controls="panelsStayOpen-collapseThree"
+              >
+                Credits
+              </button>
+            </h2>
+            <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree">
+              <div class="accordion-body">
+                <p>
+                  <strong>Detoxify:</strong>
+                  <a href="https://github.com/unitaryai/detoxify">https://github.com/unitaryai/detoxify</a>
+                </p>
+                <p>
+                  <strong>Instagramy:</strong>
+                  <a href="https://pypi.org/project/instagramy/">https://pypi.org/project/instagramy/</a>
+                </p>
+                <p>
+                  <strong>Flask:</strong>
+                  <a href="https://flask.palletsprojects.com/en/2.2.x/">https://flask.palletsprojects.com/en/2.2.x/</a>
+                </p>
+                <p>
+                  <strong>Flask-cors:</strong>
+                  <a href="https://flask-cors.readthedocs.io/en/latest/">https://flask-cors.readthedocs.io/en/latest/</a>
+                </p>
+                <p>
+                  License: <em><a href="https://www.apache.org/licenses/LICENSE-2.0">Apache License 2.0</a></em>
+                </p>
+                <p><em>Made with ❤️ by</em> <a href="https://github.com/lollo03">Lorenzo Andreasi</a>.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <input id="fraseIn" type="text" placeholder="Insert a phrase here" class="form-control" />
+        </div>
+        <div class="col">
+          <button onclick="getFrase()" type="button" class="btn btn-primary" id="bottoneFrase">Go!</button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <div class="input-group">
+            <span class="input-group-text" id="basic-addon1">@</span>
+            <input id="usernameIn" type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" />
+          </div>
+        </div>
+        <div class="col">
+          <button onclick="getUsername()" type="button" class="btn btn-primary" id="bottoneUser">Go!</button>
+        </div>
+      </div>
+      <div class="row mb-3 d-flex justify-content-center align-items-center">
+        <div id="spinner" class="spinner-border text-primary" style="visibility: hidden" role="status"></div>
+        <div id="notFoundAlert" class="alert alert-warning alert-dismissible fade show" style="display: none" role="alert">
+          Username not found!
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div id="okAlert" class="alert alert-success alert-dismissible fade show" style="display: none" role="alert">
+          Done!
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <div id="errorAlert" class="alert alert-danger alert-dismissible fade show" style="display: none" role="alert">
+          <strong>Ops!</strong> Something went terribly wrong, try again later.
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Testo</th>
+              <th scope="col">identity_attack</th>
+              <th scope="col">insult</th>
+              <th scope="col">obscene</th>
+              <th scope="col">severe_toxicity</th>
+              <th scope="col">sexual_explicit</th>
+              <th scope="col">threat</th>
+              <th scope="col">toxicity</th>
+            </tr>
+          </thead>
+          <tbody id="table"></tbody>
+        </table>
+      </div>
+      <button type="button" onclick="clearTable()" id="clearButton" class="btn btn-danger">Clear table</button>
+    </div>
+  </body>
+</html>
+<script type="text/javascript">
+  const notFoundAlert = document.getElementById("notFoundAlert");
+  const okAlert = document.getElementById("okAlert");
+  const errorAlert = document.getElementById("errorAlert");
+
+  const table = document.getElementById("table");
+  function makeTable(dati) {
+    for (let i = 0; i < dati.length; i++) {
+      const row = document.createElement("tr");
+      const th = document.createElement("th");
+      th.innerHTML = i + 1;
+      row.appendChild(th);
+      const keys = Object.keys(dati[i]);
+      for (let j = 0; j < keys.length; j++) {
+        const td = document.createElement("td");
+        const key = keys[j];
+        td.innerHTML = dati[i][key];
+        row.appendChild(td);
+      }
+      table.appendChild(row);
+    }
+  }
+
+  const clearButton = document.getElementById("clearButton");
+  function clearTable() {
+    table.innerHTML = "";
+    okAlert.style.display = "none";
+    errorAlert.style.display = "none";
+    notFoundAlert.style.display = "none";
+  }
+
+  const spinner = document.getElementById("spinner");
+  const usernameInput = document.getElementById("usernameIn");
+  usernameInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("bottoneUser").click();
+    }
+  });
+
+  async function getUsername() {
+    clearTable();
+    var username = usernameInput.value;
+    username = username.replace("@", "");
+    spinner.style.visibility = "visible";
+    try {
+      response = await fetch("http://localhost:5000/user/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ username: username }),
+      });
+    } catch {
+      errorAlert.style.display = "block";
+      spinner.style.visibility = "hidden";
+      return;
+    } finally {
+      if (response.status == 200) {
+        resJson = await response.json();
+        okAlert.style.display = "block";
+        makeTable(resJson);
+      } else if (response.status == 404) {
+        notFoundAlert.style.display = "block";
+      }
+      spinner.style.visibility = "hidden";
+    }
+  }
+
+  const fraseInput = document.getElementById("fraseIn");
+  fraseInput.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      document.getElementById("bottoneFrase").click();
+    }
+  });
+  async function getFrase() {
+    clearTable();
+    var frase = fraseInput.value;
+    spinner.style.visibility = "visible";
+    try {
+      response = await fetch("http://localhost:5000/frase/", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+        body: JSON.stringify({ frase: frase }),
+      });
+    } catch {
+      errorAlert.style.display = "block";
+      spinner.style.visibility = "hidden";
+      return;
+    }
+    if (response.ok) {
+      resJson = await response.json();
+      okAlert.style.display = "block";
+      makeTable(resJson);
+    } else {
+      errorAlert.style.display = "block";
+    }
+    spinner.style.visibility = "hidden";
+  }
+</script>
